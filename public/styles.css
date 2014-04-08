@@ -74,7 +74,7 @@ nav a.current {
     font-weight: bolder; }
   .loadfile button:hover, .loadfile input:hover {
     cursor: pointer; }
-
+    
 .error {
   color: #ff6600;
   background-color: #444444; }

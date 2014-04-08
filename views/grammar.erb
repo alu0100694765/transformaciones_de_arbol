@@ -19,44 +19,23 @@ Recuerde que una gramática $G$ es una cuaterna $G =(\Sigma,V,P,S)$.
 </ol>
 <ol>
   <li> $\Sigma = \{ ; =, ID, PI, E, +, -, *, /, \text{^}, !, \%, (, ), NUMBER \}$, 
-  <li> $V = \{ prog, expressions, s, e \}$
-  <li> Productions:
+  <li> $V = \{ prog, block \}$
+  <li> Producciones:
   <ol>
     <li>
 <pre>
 prog
-    : expressions EOF
+    : block DOT EOF
     ;
 
-expressions
-    : s  
-    | expressions ';' s
+block
+    : pinguino 
+    | pinguinos ';' pinguino
     ;
 
-s
-    : /* empty */
-    | e
-    ;
-
-e
-    : ID '=' e
-    | e '+' e
-    | e '-' e
-    | e '*' e
-    | e '/' e
-    | e '^' e
-    | e '!'
-    | e '%'
-    | '-' e 
-    | '(' e ')'
-    | NUMBER
-    | E
-    | PI
-    | ID 
-    ;
 </pre>
   </ol>
-  <li> Start symbol: $prog$
+  <li> S&iacute;mbolo de inicio: $prog$
 </ol>
 <BR>
 <BR>
