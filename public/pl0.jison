@@ -6,11 +6,14 @@ var symbol_table = {};
 function fact (n) { 
   return n==0 ? 1 : fact(n-1) * n 
 }
+
 %}
 
-%token NUMBER ID E PI EOF
+%token NUMBER ID E PI ODD EOF IF THEN ELSE WHILE DO CALL BEGIN
 /* operator associations and precedence */
 
+%right THEN ELSE
+%left '==' '>=' '<=' '<' '>' '#'
 %right '='
 %left '+' '-'
 %left '*' '/'
@@ -23,11 +26,10 @@ function fact (n) {
 
 %% /* language grammar */
 prog
-    : expressions EOF
+    : statement '.' EOF
         { 
-          $$ = $1; 
-          console.log($$);
-          return [$$, symbol_table];
+          $$ = { type: 'program', block: $1 };
+          return $$;
         }
     ;
 
@@ -44,6 +46,37 @@ expressions
 s
     : /* empty */
     | e
+    ;
+
+
+statement
+    : ID '=' e
+        { $$ = { type: '=', left: $1, right: $3 }; }
+    | CALL ID
+        { $$ = { type: 'CALL', id: $2 }; }
+    | IF condition THEN statement 
+        { $$ = { type: 'IF', condition: $2, statement: $4 }; }
+    | IF condition THEN statement ELSE statement
+        { $$ = { type: 'IF', condition: $2, true_st: $4, false_st: $6 }; }
+    | WHILE condition DO statement
+        { $$ = { type: 'WHILE', condition: $2, statement: $4 }; }
+    ;
+    
+condition
+    : ODD e
+        { $$ = { type: 'ODD', e: $2 }; }
+    | e '==' e
+        { $$ = { type: $2, left: $1, right: $3 }; }
+    | e '#' e
+        { $$ = { type: $2, left: $1, right: $3 }; }
+    | e '<' e
+        { $$ = { type: $2, left: $1, right: $3 }; }
+    | e '<=' e
+        { $$ = { type: $2, left: $1, right: $3 }; }
+    | e '>' e
+        { $$ = { type: $2, left: $1, right: $3 }; }
+    | e '>=' e
+        { $$ = { type: $2, left: $1, right: $3 }; }
     ;
 
 e
@@ -88,4 +121,4 @@ e
     | ID 
         { $$ = symbol_table[yytext] || 0; }
     ;
-
+    
