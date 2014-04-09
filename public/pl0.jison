@@ -87,7 +87,7 @@ procs
 
 statement
     : ID '=' e
-        { $$ = { type: '=', left: $1, right: $3 }; }
+        { $$ = { type: '=', left: { type: 'ID', value: $1 }, right: $3 }; }
     | CALL ID args
         { $$ = { type: 'CALL', id: $2, arguments: $3 }; }
     | BEGIN statement statement_r END
@@ -117,7 +117,7 @@ args
     : /* vacío */
     | '(' ID args_r ')'
         {
-          $$ = [$2];
+          $$ = [{ type: 'ID', value: $2 }];
           if ($3) $$ = $$.concat($3);
         }
     ;
@@ -126,7 +126,7 @@ args_r
     : /* vacío */
     | ',' ID args_r
         {
-          $$ = [$2]
+          $$ = [{ type: 'ID', value: $2 }]
           if ($3) $$ = $$.concat($3);
         }
     ;
@@ -140,44 +140,36 @@ condition
 
 e
     : ID '=' e
-        { symbol_table[$1] = $$ = $3; }
+        {$$ = { type: '=', left: { type: 'ID', value: $1 }, right: $3 }; }
     | PI '=' e 
         { throw new Error("Can't assign to constant 'Ï€'"); }
     | E '=' e 
         { throw new Error("Can't assign to math constant 'e'"); }
     | e '+' e
-        {$$ = $1+$3;}
+        {$$ = { type: '+', left: $1, right: $3 }; }
     | e '-' e
-        {$$ = $1-$3;}
+        {$$ = { type: '-', left: $1, right: $3 }; }
     | e '*' e
-        {$$ = $1*$3;}
+        {$$ = { type: '*', left: $1, right: $3 }; }
     | e '/' e
-        {
-          if ($3 == 0) throw new Error("Division by zero, error!");
-          $$ = $1/$3;
-        }
+        {$$ = { type: '/', left: $1, right: $3 }; }
     | e '^' e
-        {$$ = Math.pow($1, $3);}
+        {$$ = { type: '^', left: $1, right: $3 }; }
     | e '!'
-        {
-          if ($1 % 1 !== 0) 
-             throw "Error! Attempt to compute the factorial of "+
-                   "a floating point number "+$1;
-          $$ = fact($1);
-        }
+        {$$ = { type: '!', left: $1 }; }
     | e '%'
-        {$$ = $1/100;}
+        {$$ = { type: '%', left: $1 }; }
     | '-' e %prec UMINUS
-        {$$ = -$2;}
+        {$$ = { type: '-', right: $2 }; }
     | '(' e ')'
         {$$ = $2;}
     | NUMBER
-        {$$ = Number(yytext);}
+        {$$ = { type: 'NUM', value: Number(yytext) };}
     | E
         {$$ = Math.E;}
     | PI
         {$$ = Math.PI;}
     | ID 
-        { $$ = symbol_table[yytext] || 0; }
+        { $$ = { type: 'ID', value: $1 }; }
     ;
     
