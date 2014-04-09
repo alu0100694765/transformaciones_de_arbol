@@ -6,7 +6,7 @@ use OmniAuth::Builder do
   provider :google_oauth2, config['identifier'], config['secret']
   config = YAML.load_file 'config/config_templatefb.yml'
   provider :facebook, config['identifier'], config['secret']
-  #provider :facebook, config['identifier'], config['secret']
+
 end
 
 get '/auth/:name/callback' do
