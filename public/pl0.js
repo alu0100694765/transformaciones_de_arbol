@@ -116,7 +116,7 @@ case 12:
           if ($$[$0]) this.$ = this.$.concat($$[$0]);
         
 break;
-case 13: this.$ = { type: '=', left: $$[$0-2], right: $$[$0] }; 
+case 13: this.$ = { type: '=', left: { type: 'ID', value: $$[$0-2] }, right: $$[$0] }; 
 break;
 case 14: this.$ = { type: 'CALL', id: $$[$0-1], arguments: $$[$0] }; 
 break;
@@ -138,12 +138,12 @@ case 20:
         
 break;
 case 22:
-          this.$ = [$$[$0-2]];
+          this.$ = [{ type: 'ID', value: $$[$0-2] }];
           if ($$[$0-1]) this.$ = this.$.concat($$[$0-1]);
         
 break;
 case 24:
-          this.$ = [$$[$0-1]]
+          this.$ = [{ type: 'ID', value: $$[$0-1] }]
           if ($$[$0]) this.$ = this.$.concat($$[$0]);
         
 break;
@@ -151,45 +151,37 @@ case 25: this.$ = { type: 'ODD', e: $$[$0] };
 break;
 case 26: this.$ = { type: $$[$0-1], left: $$[$0-2], right: $$[$0] }; 
 break;
-case 27: symbol_table[$$[$0-2]] = this.$ = $$[$0]; 
+case 27:this.$ = { type: '=', left: { type: 'ID', value: $$[$0-2] }, right: $$[$0] }; 
 break;
 case 28: throw new Error("Can't assign to constant 'π'"); 
 break;
 case 29: throw new Error("Can't assign to math constant 'e'"); 
 break;
-case 30:this.$ = $$[$0-2]+$$[$0];
+case 30:this.$ = { type: '+', left: $$[$0-2], right: $$[$0] }; 
 break;
-case 31:this.$ = $$[$0-2]-$$[$0];
+case 31:this.$ = { type: '-', left: $$[$0-2], right: $$[$0] }; 
 break;
-case 32:this.$ = $$[$0-2]*$$[$0];
+case 32:this.$ = { type: '*', left: $$[$0-2], right: $$[$0] }; 
 break;
-case 33:
-          if ($$[$0] == 0) throw new Error("Division by zero, error!");
-          this.$ = $$[$0-2]/$$[$0];
-        
+case 33:this.$ = { type: '/', left: $$[$0-2], right: $$[$0] }; 
 break;
-case 34:this.$ = Math.pow($$[$0-2], $$[$0]);
+case 34:this.$ = { type: '^', left: $$[$0-2], right: $$[$0] }; 
 break;
-case 35:
-          if ($$[$0-1] % 1 !== 0) 
-             throw "Error! Attempt to compute the factorial of "+
-                   "a floating point number "+$$[$0-1];
-          this.$ = fact($$[$0-1]);
-        
+case 35:this.$ = { type: '!', left: $$[$0-1] }; 
 break;
-case 36:this.$ = $$[$0-1]/100;
+case 36:this.$ = { type: '%', left: $$[$0-1] }; 
 break;
-case 37:this.$ = -$$[$0];
+case 37:this.$ = { type: '-', right: $$[$0] }; 
 break;
 case 38:this.$ = $$[$0-1];
 break;
-case 39:this.$ = Number(yytext);
+case 39:this.$ = { type: 'NUM', value: Number(yytext) };
 break;
 case 40:this.$ = Math.E;
 break;
 case 41:this.$ = Math.PI;
 break;
-case 42: this.$ = symbol_table[yytext] || 0; 
+case 42: this.$ = { type: 'ID', value: $$[$0] }; 
 break;
 }
 },

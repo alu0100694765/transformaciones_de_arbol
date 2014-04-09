@@ -50,13 +50,13 @@ suite('Tests', function(){
   
   test('Call: ', function(){
     object = pl0.parse("call z .")
-    assert.equal(object.block.st.type, "call")
+    assert.equal(object.block.st.type, "CALL")
   });
 
  
   test('While Do: ', function(){
     object = pl0.parse("while x == 3 do z = z+3.")
-    assert.equal(object.block.st.type, "IF")
+    assert.equal(object.block.st.type, "WHILE")
   });
 
   test('Begin End: ', function(){
@@ -71,7 +71,7 @@ suite('Tests', function(){
   });
 
   test('Error de Sintaxis: ', function(){
-    assert.throws(function() { pl0.parse("x = 323"); }, /Expected "."/);
+    assert.throws(function() { pl0.parse("x = 323"); }, /Parse error/);
   });
 
 });

@@ -9,7 +9,7 @@ require 'pp'
 enable :sessions
 set :session_secret, '*&(^#234)'
 set :reserved_words, %w{grammar test login auth}
-set :max_files, 3        # no more than max_files+1 will be saved
+set :max_files, 10        # no more than max_files+1 will be saved
 
 helpers do
   def current?(path='/')
@@ -33,7 +33,7 @@ get '/:selected?' do |selected|
   pp programs
   puts "selected = #{selected}"
   c  = PL0Program.first(:name => selected)
-  source = if c then c.source else "a = 3-2-1" end
+  source = if c then c.source else "a = 3-2-1." end
   erb :index, 
       :locals => { :programs => programs, :source => source }
 end
@@ -52,7 +52,7 @@ post '/save' do
         c.source = params["input"]
         c.save
       else
-        if PL0Program.all.size >= settings.max_files
+        if PL0Program.all.size > settings.max_files
           c = PL0Program.all.sample
           c.destroy
         end
@@ -68,7 +68,7 @@ post '/save' do
   else
     flash[:notice] = 
       %Q{<div class="error">You are not authenticated.<br />
-         Sign in with Google.
+         Sign in with Google, GitHub or Facebook.
          </div>}
     redirect back
   end
