@@ -57,7 +57,8 @@
     color: white; 
   }
   nav a:hover {
-    background: #111111; 
+    background: #111111;
+    color: white;
   }
 
   p {
@@ -69,16 +70,16 @@
   
   a {
     text-decoration: none;
-    color: white;
+    color: black;
   }
   
   a:hover {
     text-decoration: underline;
-    color: white;
+    color: black;
   }
   
   a:link { 
-    color:white; 
+    color:black; 
   }
   
   footer {
