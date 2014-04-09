@@ -26,28 +26,64 @@ function fact (n) {
 
 %% /* language grammar */
 prog
-    : statement '.' EOF
+    : block '.' EOF
         { 
           $$ = { type: 'program', block: $1 };
           return $$;
         }
     ;
 
-expressions
-    : s  
-        { $$ = (typeof $1 === 'undefined')? [] : [ $1 ]; }
-    | expressions ';' s
-        { $$ = $1;
-          if ($3) $$.push($3); 
-          console.log($$);
+block
+    : consts vars procs statement
+        {
+          $$ = { type: 'block', consts: $1, vars: $2, procs: $3, st: $4 };
         }
     ;
-
-s
-    : /* empty */
-    | e
+    
+consts
+    : /* vacío */
+    | CONST ID '=' NUMBER r_consts ';'
+        {
+          $$ = [ { type: 'const', id: $2 } ];
+          if ($5) $$ = $$.concat($5);
+        }
     ;
-
+    
+r_consts
+    : /* vacío */
+    | ',' ID '=' NUMBER r_consts
+        {
+          $$ = [ { type: 'const', id: $2 } ];
+          if ($5) $$ = $$.concat($5);
+        }
+    ;
+    
+vars
+    : /* vacío */
+    | VAR ID r_vars ';'
+        {
+          $$ = [ { type: 'var', id: $2 } ];
+          if ($3) $$ = $$.concat($3);
+        }
+    ;
+    
+r_vars
+    : /* vacío */
+    | ',' ID r_vars
+        {
+          $$ = [ { type: 'var', id: $2 } ];
+          if ($3) $$ = $$.concat($3);
+        }
+    ;
+    
+procs
+    : /* empty */
+    | PROCEDURE ID args ';' block ';' procs
+        {
+          $$ = [ { type: 'procedure', id: $2, arguments: $3, block: $5 } ];
+          if ($7) $$ = $$.concat($7);
+        }
+    ;
 
 statement
     : ID '=' e
@@ -98,17 +134,7 @@ args_r
 condition
     : ODD e
         { $$ = { type: 'ODD', e: $2 }; }
-    | e '==' e
-        { $$ = { type: $2, left: $1, right: $3 }; }
-    | e '#' e
-        { $$ = { type: $2, left: $1, right: $3 }; }
-    | e '<' e
-        { $$ = { type: $2, left: $1, right: $3 }; }
-    | e '<=' e
-        { $$ = { type: $2, left: $1, right: $3 }; }
-    | e '>' e
-        { $$ = { type: $2, left: $1, right: $3 }; }
-    | e '>=' e
+    | e COMP e
         { $$ = { type: $2, left: $1, right: $3 }; }
     ;
 
