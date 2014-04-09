@@ -9,7 +9,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :facebook,config['identifier'], config['secret']
 end
 
-get '/auth/:name/callback' do
+get '/auth/:provider/callback' do
     erb "<h1>#{params[:provider]}</h1>
          <pre>#{JSON.pretty_generate(request.env['omniauth.auth'])}</pre>"
   end
