@@ -1,5 +1,5 @@
 desc "Run server"
-task :default => [:use_keys, :jison] do
+task :default => [:jison] do
   sh "rackup"
 end
 
