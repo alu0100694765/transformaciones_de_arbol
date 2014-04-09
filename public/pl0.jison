@@ -52,14 +52,47 @@ s
 statement
     : ID '=' e
         { $$ = { type: '=', left: $1, right: $3 }; }
-    | CALL ID
-        { $$ = { type: 'CALL', id: $2 }; }
+    | CALL ID args
+        { $$ = { type: 'CALL', id: $2, arguments: $3 }; }
+    | BEGIN statement statement_r END
+        { 
+          var v_sts = [$2];
+          if ($3) v_sts = v_sts.concat($3);
+          $$ = { type: 'BEGIN', statements: v_sts }; 
+        }
     | IF condition THEN statement 
         { $$ = { type: 'IF', condition: $2, statement: $4 }; }
     | IF condition THEN statement ELSE statement
         { $$ = { type: 'IF', condition: $2, true_st: $4, false_st: $6 }; }
     | WHILE condition DO statement
         { $$ = { type: 'WHILE', condition: $2, statement: $4 }; }
+    ;
+    
+statement_r
+    : /* vacío */
+    | ';' statement statement_r
+        {
+          $$ = [$2];
+          if ($3) $$ = $$.concat($3);
+        }
+    ;
+    
+args
+    : /* vacío */
+    | '(' ID args_r ')'
+        {
+          $$ = [$2];
+          if ($3) $$ = $$.concat($3);
+        }
+    ;
+    
+args_r
+    : /* vacío */
+    | ',' ID args_r
+        {
+          $$ = [$2]
+          if ($3) $$ = $$.concat($3);
+        }
     ;
     
 condition
