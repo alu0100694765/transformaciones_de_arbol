@@ -2,6 +2,7 @@ require 'omniauth-oauth2'
 require 'omniauth-google-oauth2'
 require 'omniauth-facebook'
 require 'omniauth-github'
+require 'omniauth-twitter'
 
 use OmniAuth::Builder do
   config = YAML.load_file 'config/config_template.yml'
@@ -10,6 +11,8 @@ use OmniAuth::Builder do
   provider :facebook, config['identifier'], config['secret']
   config = YAML.load_file 'config/config_templategithub.yml'
   provider :github, config['identifier'], config['secret']
+  config = YAML.load_file 'config/config_templatetwitter.yml'
+  provider :twitter, config['identifier'], config['secret']
 
 end
 

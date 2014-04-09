@@ -11,6 +11,7 @@ gem 'omniauth-google-oauth2'
 gem 'sass'
 gem 'omniauth-facebook'
 gem 'omniauth-github'
+gem 'omniauth-twitter'
 
 group :development do
   gem 'dm-sqlite-adapter'
