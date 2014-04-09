@@ -22,16 +22,16 @@ Por último se realizaran una serie de pruebas que permitirán comprobar el correc
 
 ## Realización de la Práctica
 
-* README.md -
-* Página principal y vistas -
-* Documentación de la gramática -
-* Implementación Analizador -
-* Code Mirror -
-* Base de Datos -
-* Autentificación - 
-* Pruebas -
-* Despliegue Heroku -
-* Estilo -
+* README.md - Cristo [OK]
+* Página principal y vistas - Cristo | Sawan [OK]
+* Documentación de la gramática - Cristo [OK]
+* Implementación Analizador - Cristo [OK]
+* Code Mirror -Cristo [OK]
+* Base de Datos - Cristo | Sawan [OK]
+* Autentificación - Sawan [OK]
+* Pruebas - Sawan [OK]
+* Despliegue Heroku - Sawan [OK]
+* Estilo - Cristo | Sawan [OK]
 
 ## Despliegue
 
