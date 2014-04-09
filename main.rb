@@ -21,6 +21,10 @@ get '/grammar' do
   erb :grammar
 end
 
+get '/tests' do
+  erb :tests
+end
+
 get '/:selected?' do |selected|
   puts "*************@auth*****************"
   puts session[:name]
