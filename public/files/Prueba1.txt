@@ -1,6 +1,8 @@
-var x, squ;
- 
-procedure square;
+
+const x = 10;
+var squ;
+
+procedure square (squ);
 begin
    squ = x * x
 end;
