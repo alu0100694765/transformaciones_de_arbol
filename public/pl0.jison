@@ -1,10 +1,13 @@
 /* description: Parses end executes mathematical expressions. */
 
 %{
-var symbol_t = {};
+  
+  var symbol_t = { global: {} };
 
-function fact (n) { 
-  return n==0 ? 1 : fact(n-1) * n 
+  var ambito = "global";
+
+  function fact (n) { 
+    return n==0 ? 1 : fact(n-1) * n 
 }
 
 %}
@@ -28,7 +31,7 @@ function fact (n) {
 prog
     : block '.' EOF
         { 
-          $$ = { type: 'program', block: $1, symbol_table: symbol_t };
+          $$ = { type: 'program', block: $1, symbol_table: symbol_t.global };
           return $$;
         }
     ;
@@ -44,7 +47,7 @@ consts
     : /* vacío */
     | CONST ID '=' NUMBER r_consts ';'
         {
-          symbol_t[$2] = { type: 'const', value: $4 };
+          symbol_t[ambito][$2] = { type: 'const', value: $4 };
           //$$ = [ { type: 'const', id: $2, value: $4 } ];
           //if ($5) $$ = $$.concat($5);
         }
@@ -54,7 +57,7 @@ r_consts
     : /* vacío */
     | ',' ID '=' NUMBER r_consts
         {
-          symbol_t[$2] = { type: 'const', value: $4 };
+          symbol_t[ambito][$2] = { type: 'const', value: $4 };
           //$$ = [ { type: 'const', id: $2, value: $4 } ];
           //if ($5) $$ = $$.concat($5);
         }
@@ -64,7 +67,7 @@ vars
     : /* vacío */
     | VAR ID r_vars ';'
         {
-          symbol_t[$2] = { type: 'var' };
+          symbol_t[ambito][$2] = { type: 'var' };
           //$$ = [ { type: 'var', id: $2 } ];
           //if ($3) $$ = $$.concat($3);
         }
@@ -74,7 +77,7 @@ r_vars
     : /* vacío */
     | ',' ID r_vars
         {
-          symbol_t[$2] = { type: 'var' };
+          symbol_t[ambito][$2] = { type: 'var' };
           //$$ = [ { type: 'var', id: $2 } ];
           //if ($3) $$ = $$.concat($3);
         }
@@ -84,7 +87,7 @@ procs
     : /* empty */
     | PROCEDURE ID args ';' block ';' procs
         {
-          symbol_t[$2] = { type: 'procedure', arguments: $3? $3.length : 0 };
+          symbol_t[ambito][$2] = { type: 'procedure', arguments: $3? $3.length : 0 };
           $$ = [ { type: 'procedure', id: $2, arguments: $3, block: $5 } ];
           if ($7) $$ = $$.concat($7);
         }
