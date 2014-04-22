@@ -1,7 +1,7 @@
 /* description: Parses end executes mathematical expressions. */
 
 %{
-var symbol_table = {};
+var symbol_t = {};
 
 function fact (n) { 
   return n==0 ? 1 : fact(n-1) * n 
@@ -28,7 +28,7 @@ function fact (n) {
 prog
     : block '.' EOF
         { 
-          $$ = { type: 'program', block: $1 };
+          $$ = { type: 'program', block: $1, symbol_table: symbol_t };
           return $$;
         }
     ;
@@ -36,7 +36,7 @@ prog
 block
     : consts vars procs statement
         {
-          $$ = { type: 'block', consts: $1, vars: $2, procs: $3, st: $4 };
+          $$ = { type: 'block', procs: $3, st: $4 };
         }
     ;
     
@@ -44,8 +44,9 @@ consts
     : /* vacío */
     | CONST ID '=' NUMBER r_consts ';'
         {
-          $$ = [ { type: 'const', id: $2 } ];
-          if ($5) $$ = $$.concat($5);
+          symbol_t[$2] = { type: 'const', value: $4 };
+          //$$ = [ { type: 'const', id: $2, value: $4 } ];
+          //if ($5) $$ = $$.concat($5);
         }
     ;
     
@@ -53,8 +54,9 @@ r_consts
     : /* vacío */
     | ',' ID '=' NUMBER r_consts
         {
-          $$ = [ { type: 'const', id: $2 } ];
-          if ($5) $$ = $$.concat($5);
+          symbol_t[$2] = { type: 'const', value: $4 };
+          //$$ = [ { type: 'const', id: $2, value: $4 } ];
+          //if ($5) $$ = $$.concat($5);
         }
     ;
     
@@ -62,8 +64,9 @@ vars
     : /* vacío */
     | VAR ID r_vars ';'
         {
-          $$ = [ { type: 'var', id: $2 } ];
-          if ($3) $$ = $$.concat($3);
+          symbol_t[$2] = { type: 'var' };
+          //$$ = [ { type: 'var', id: $2 } ];
+          //if ($3) $$ = $$.concat($3);
         }
     ;
     
@@ -71,8 +74,9 @@ r_vars
     : /* vacío */
     | ',' ID r_vars
         {
-          $$ = [ { type: 'var', id: $2 } ];
-          if ($3) $$ = $$.concat($3);
+          symbol_t[$2] = { type: 'var' };
+          //$$ = [ { type: 'var', id: $2 } ];
+          //if ($3) $$ = $$.concat($3);
         }
     ;
     
@@ -80,6 +84,7 @@ procs
     : /* empty */
     | PROCEDURE ID args ';' block ';' procs
         {
+          symbol_t[$2] = { type: 'procedure', arguments: $3? $3.length : 0 };
           $$ = [ { type: 'procedure', id: $2, arguments: $3, block: $5 } ];
           if ($7) $$ = $$.concat($7);
         }
@@ -114,19 +119,19 @@ statement_r
     ;
     
 args
-    : /* vacío */
-    | '(' ID args_r ')'
+    : /* vacío */ { $$ = []; }
+    | '(' e args_r ')'
         {
-          $$ = [{ type: 'ID', value: $2 }];
+          $$ = [{ type: 'ARG', value: $2 }];
           if ($3) $$ = $$.concat($3);
         }
     ;
     
 args_r
     : /* vacío */
-    | ',' ID args_r
+    | ',' e args_r
         {
-          $$ = [{ type: 'ID', value: $2 }]
+          $$ = [{ type: 'ARG', value: $2 }]
           if ($3) $$ = $$.concat($3);
         }
     ;
