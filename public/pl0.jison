@@ -1,11 +1,10 @@
 /* description: Parses end executes mathematical expressions. */
 
 %{
+  var aux_use = {};
   
-  var symbol_t = { global: {} };
-
-  var ambito = "global";
-
+  var ambitos = [[{}]];
+  
   function fact (n) { 
     return n==0 ? 1 : fact(n-1) * n 
 }
@@ -31,15 +30,22 @@
 prog
     : block '.' EOF
         { 
-          $$ = { type: 'program', block: $1, symbol_table: symbol_t.global };
+          $$ = { type: 'program', block: $1, symbol_table: ambitos[0][0], usados: aux_use };
           return $$;
         }
     ;
 
 block
-    : consts vars procs statement
+    : cyv procs statement
         {
-          $$ = { type: 'block', procs: $3, st: $4 };
+          $$ = { type: 'block', procs: $2, st: $3 };
+        }
+    ;
+    
+cyv
+    : consts vars
+        {
+          ambitos.push([{}]);
         }
     ;
     
@@ -47,7 +53,8 @@ consts
     : /* vacío */
     | CONST ID '=' NUMBER r_consts ';'
         {
-          symbol_t[ambito][$2] = { type: 'const', value: $4 };
+          ambitos[ambitos.length - 1][ambitos[ambitos.length - 1].length - 1][$2] = { type: 'const', value: $4 };
+
           //$$ = [ { type: 'const', id: $2, value: $4 } ];
           //if ($5) $$ = $$.concat($5);
         }
@@ -57,7 +64,8 @@ r_consts
     : /* vacío */
     | ',' ID '=' NUMBER r_consts
         {
-          symbol_t[ambito][$2] = { type: 'const', value: $4 };
+          ambitos[ambitos.length - 1][ambitos[ambitos.length - 1].length - 1][$2] = { type: 'const', value: $4 };
+          
           //$$ = [ { type: 'const', id: $2, value: $4 } ];
           //if ($5) $$ = $$.concat($5);
         }
@@ -67,7 +75,8 @@ vars
     : /* vacío */
     | VAR ID r_vars ';'
         {
-          symbol_t[ambito][$2] = { type: 'var' };
+          ambitos[ambitos.length - 1][ambitos[ambitos.length - 1].length - 1][$2] = { type: 'var' };
+          
           //$$ = [ { type: 'var', id: $2 } ];
           //if ($3) $$ = $$.concat($3);
         }
@@ -77,25 +86,47 @@ r_vars
     : /* vacío */
     | ',' ID r_vars
         {
-          symbol_t[ambito][$2] = { type: 'var' };
+          ambitos[ambitos.length - 1][ambitos[ambitos.length - 1].length - 1][$2] = { type: 'var' };
+          
           //$$ = [ { type: 'var', id: $2 } ];
           //if ($3) $$ = $$.concat($3);
         }
     ;
     
 procs
-    : /* empty */
-    | PROCEDURE ID args ';' block ';' procs
+    : /* empty */ 
+        {     
+          ambitos.pop(); 
+        }
+    | proc procs
         {
-          symbol_t[ambito][$2] = { type: 'procedure', arguments: $3? $3.length : 0 };
-          $$ = [ { type: 'procedure', id: $2, arguments: $3, block: $5 } ];
-          if ($7) $$ = $$.concat($7);
+
+          $$ = [$1];
+          if ($2) $$ = $$.concat($2);
+          
+          if (ambitos[ambitos.length - 1].length == 0)
+            ambitos.pop();
+        }
+    ;
+    
+proc
+    : PROCEDURE ID args ';' block ';'
+        {
+
+          $$ = { type: 'procedure', id: $2, arguments: $3, block: $5, symbol_table: ambitos[ambitos.length - 1][0], usados: aux_use };
+
+          ambitos[ambitos.length - 2][ambitos[ambitos.length - 1].length - 1][$2] = { type: 'procedure', arguments: $3? $3.length : 0 };
+        
+          ambitos[ambitos.length - 1] = [{}];
         }
     ;
 
 statement
     : ID '=' e
-        { $$ = { type: '=', left: { type: 'ID', value: $1 }, right: $3 }; }
+        { 
+          aux_use[$1] = { type: 'var' };
+          $$ = { type: '=', left: { type: 'ID', value: $1 }, right: $3 }; 
+        }
     | CALL ID args
         { $$ = { type: 'CALL', id: $2, arguments: $3 }; }
     | BEGIN statement statement_r END
@@ -148,7 +179,10 @@ condition
 
 e
     : ID '=' e
-        {$$ = { type: '=', left: { type: 'ID', value: $1 }, right: $3 }; }
+        {
+          aux_use[$1] = { type: 'var' }
+          $$ = { type: '=', left: { type: 'ID', value: $1 }, right: $3 }; 
+        }
     | PI '=' e 
         { throw new Error("Can't assign to constant 'Ï€'"); }
     | E '=' e 
@@ -178,6 +212,9 @@ e
     | PI
         {$$ = Math.PI;}
     | ID 
-        { $$ = { type: 'ID', value: $1 }; }
+        { 
+          aux_use[$1] = { type: 'var' }
+          $$ = { type: 'ID', value: $1 };
+        }
     ;
     

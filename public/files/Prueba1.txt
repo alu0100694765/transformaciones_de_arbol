@@ -1,15 +1,24 @@
-
 const x = 10;
 var squ;
 
 procedure square (squ);
+const t = 2;
+  procedure te (m);
+  const s = 2, a = 43;
+  b = s + a;
 begin
-   squ = x * x
+   squ = x * t
 end;
- 
+
+procedure triangle (d);
+const s = 2;
+begin
+   tra = s * d
+end;
+
 begin
    x = 1 - 4 - 2;
-   while x <= 10 do
+   while y <= 10 do
    begin
       call square;
       x = x + 1
