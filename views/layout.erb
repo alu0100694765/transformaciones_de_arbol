@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+
+    <title> Analizador PL0 con Jison </title>
+    
+    <meta name="Author" content="Cristo Gonz&aacute;lez Rodr&iacute;guez - alu0100694987 | Sawan J. Kapai Harpalani - alu0100694765" />  
+    <meta name="Description" content="Analizador L&eacute;xico de JavaScript" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+    <link rel="stylesheet" href="/styles.css" type="text/css" media="screen" charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    
+    <script type="text/javascript" src="pl0.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="lib/codemirror.css">
+    <script src="lib/codemirror.js"></script>
+    <script src="mode/pascal/pascal.js"></script>
+    
+    <!-- Tests -->
+    <script src="tests/chai.js"></script>
+    <script src="/tests/mocha.js"></script>
+    <script>mocha.setup('tdd')</script>
+    <script src="tests/tests.js"></script>
+  
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li> <a href="/"  title="Home" <%=current?("/")%>>Inicio</a> </li>
+        <li> <a href="/grammar"  title="Grammar" <%=current?("/grammar")%>>Gram&aacute;tica</a> </li>
+        <li> <a href="/tests"  title="Tests" <%=current?("/tests")%>>Tests</a> </li>
+        <li> <a href="/auth/google_oauth2"  title="Google" <%=current?("/auth/google_oauth2")%>>Iniciar Sesi&oacute;n con Google</a> </li>
+        <li> <a href="/auth/facebook"  title="Facebook" <%=current?("/auth/facebook")%>>Iniciar Sesi&oacute;n con Facebook</a> </li>
+        <li> <a href="/auth/github"  title="Github" <%=current?("/auth/github")%>>Iniciar Sesi&oacute;n con Github</a> </li>
+        <li> <a href="/auth/twitter"  title="Twitter" <%=current?("/auth/twitter")%>>Iniciar Sesi&oacute;n con Twitter</a> </li>
+        <li> <a href="https://alu0100694987@bitbucket.org/alu0100694987/p7-pdl.git"  title="Bitbucket">Bitbucket</a> </li>
+      </ul>
+    </nav>
+    <%= yield %>
+    <br><br>
+    <footer>
+      <div id="piedepagina">
+        Pr&aacute;ctica: Analizador PL0 Jison - PDL | <a href="https://alu0100694987@bitbucket.org/alu0100694987/p7-pdl.git">Repositorio Bitbucket</a> <br> 
+      </div>
+    </footer>
+  </body>
+</html>
+

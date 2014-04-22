@@ -1,0 +1,75 @@
+<h1>Analizador de PL0 ampliado utilizando Jison</h1>
+<div id="content">
+  <p class="loadfile">
+    <input type="file" id="files" />
+  </p>
+  <p>
+  <nav>
+  <ul>
+    <% programs.sort.each do |p| %>
+      <li><a href="<%= p.name %>" <%=current?('/'+p.name)%>><%= p.name %></a></li>
+    <% end %>
+  </ul>
+  </nav>
+  <table>
+    <tr>
+      <td>
+        <form action="/save" method="post">
+          <textarea id="input" name="input" 
+                    autofocus cols = "80" rows = "6">
+<%= source %>
+          </textarea>
+          <br/>
+          <label for="saveas">Guardar como: </label>
+          <input id="saveas" type="text" name="fname" 
+                 title="Un identificador (que no sea la palabra 'test')"
+                 pattern="^(?!test$)\w+$"
+          />
+        </form>
+      </td> 
+    </tr>
+  </table>
+  <button id="parse" type="button">Analizar</button>
+  </p>
+  <p>
+    <div id="flash"><%= flash[:notice] if flash[:notice]%></div>
+  </p>
+  <div class="output"><!-- Output goes here! --> 
+<pre>
+<span id="output">
+</span>
+</pre>
+  </div>
+</div>
+
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("input"), {
+        lineNumbers: true,
+        lineWrapping: true,
+        autofocus: true,
+        viewportMargin: Infinity,
+        mode: "text/x-pascal"
+      });
+
+    
+      function dump(fileName) {
+        $.get(fileName, function (data) {
+          $("#input").val(data);
+            editor.setValue(data);
+        });
+      };
+      document.getElementById('files').addEventListener('change', CopyMe, false);
+
+      function CopyMe(evt) {
+        var file = evt.target.files[0];
+        if (file) {
+          var reader = new FileReader();
+          reader.onload = function(e) { 
+            editor.setValue(e.target.result);
+          }
+          var c = reader.readAsText(file);
+        }
+        else { alert("Failed to load file"); }
+      }
+   </script>
+
