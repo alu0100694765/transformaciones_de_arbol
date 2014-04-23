@@ -14,7 +14,7 @@ procedure triangle (d);
 const s = 2;
 var tra;
 begin
-   tra = s * d
+   call triangle(s)
 end;
 
 begin

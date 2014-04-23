@@ -127,7 +127,7 @@ break;
 case 13:
           
           this.$ = { type: 'procedure', id: $$[$0-3][0], arguments: $$[$0-3][1], block: $$[$0-1], symbol_table: ambitos.pop() };
-          
+          nombres.pop();
         
 break;
 case 14:
@@ -138,18 +138,21 @@ case 14:
 break;
 case 15:
           this.$ = $$[$0];
-          
+          nombres.push($$[$0]);
           ambitos.push({});
+          console.log(nombres);
         
 break;
 case 16: 
-          buscarVariable($$[$0-2]);
-          this.$ = { type: '=', left: { type: 'ID', value: $$[$0-2] }, right: $$[$0] }; 
+
+          //buscarVariable($$[$0-2]);
+          this.$ = { type: '=', left: { type: 'ID', value: $$[$0-2], declared_in: buscarVariable($$[$0-2]) }, right: $$[$0] }; 
         
 break;
 case 17: 
-          buscarProcedimiento($$[$0-1], $$[$0].length);
-          this.$ = { type: 'CALL', id: $$[$0-1], arguments: $$[$0] }; 
+
+          //buscarProcedimiento($$[$0-1], $$[$0].length);
+          this.$ = { type: 'CALL', id: $$[$0-1], declared_in: buscarProcedimiento($$[$0-1], $$[$0].length), arguments: $$[$0] }; 
         
 break;
 case 18: 
@@ -201,8 +204,9 @@ break;
 case 33: this.$ = { type: $$[$0-1], left: $$[$0-2], right: $$[$0] }; 
 break;
 case 34:
-          buscarVariable($$[$0-2]);
-          this.$ = { type: '=', left: { type: 'ID', value: $$[$0-2] }, right: $$[$0] }; 
+
+          //buscarVariable($$[$0-2]);
+          this.$ = { type: '=', left: { type: 'ID', value: $$[$0-2], declared_in: buscarVariable($$[$0-2]) }, right: $$[$0] }; 
         
 break;
 case 35: throw new Error("Can't assign to constant 'π'"); 
@@ -234,8 +238,9 @@ break;
 case 48:this.$ = Math.PI;
 break;
 case 49: 
-          buscarSimbolo($$[$0]);
-          this.$ = { type: 'ID', value: $$[$0] };
+
+          //buscarSimbolo($$[$0]);
+          this.$ = { type: 'ID', value: $$[$0], declared_in: buscarSimbolo($$[$0]) };
         
 break;
 }
@@ -380,16 +385,16 @@ parse: function parse(input) {
     return true;
 }};
 
-  var aux_use = {};
   
   var ambitos = [{}];
+  var nombres = ["global"];
   
   function buscarSimbolo (s) {
     
     for (i = (ambitos.length - 1); i >= 0; i--) {
 
       if (ambitos[i][s] != undefined && ambitos[i][s].type != "procedure")
-        return;
+        return nombres[i];
     }
     
     throw new Error(" Se precisa la declaraci&oacute;n previa de '" + s + "'" );
@@ -401,7 +406,7 @@ parse: function parse(input) {
 
       if (ambitos[i][s] != undefined)
         if (ambitos[i][s].type == "var" || ambitos[i][s].type == "argument")
-          return;
+          return nombres[i];
         else
           throw new Error(" '" + s + "' no es una variable" );
     }
@@ -416,7 +421,7 @@ parse: function parse(input) {
       if (ambitos[i][s] != undefined && ambitos[i][s].type == "procedure") {
        
         if (ambitos[i][s].arguments == n)
-          return;
+          return nombres[i];
         
         throw new Error(" Se pasa/n " + n + " parametros a '" + s + "'; se esperaba/n " + ambitos[i][s].arguments);
       }

@@ -1,16 +1,16 @@
 /* description: Parses end executes mathematical expressions. */
 
 %{
-  var aux_use = {};
   
   var ambitos = [{}];
+  var nombres = ["global"];
   
   function buscarSimbolo (s) {
     
     for (i = (ambitos.length - 1); i >= 0; i--) {
 
       if (ambitos[i][s] != undefined && ambitos[i][s].type != "procedure")
-        return;
+        return nombres[i];
     }
     
     throw new Error(" Se precisa la declaraci&oacute;n previa de '" + s + "'" );
@@ -22,7 +22,7 @@
 
       if (ambitos[i][s] != undefined)
         if (ambitos[i][s].type == "var" || ambitos[i][s].type == "argument")
-          return;
+          return nombres[i];
         else
           throw new Error(" '" + s + "' no es una variable" );
     }
@@ -37,7 +37,7 @@
       if (ambitos[i][s] != undefined && ambitos[i][s].type == "procedure") {
        
         if (ambitos[i][s].arguments == n)
-          return;
+          return nombres[i];
         
         throw new Error(" Se pasa/n " + n + " parametros a '" + s + "'; se esperaba/n " + ambitos[i][s].arguments);
       }
@@ -138,7 +138,7 @@ proc
         {
           
           $$ = { type: 'procedure', id: $2[0], arguments: $2[1], block: $4, symbol_table: ambitos.pop() };
-          
+          nombres.pop();
         }
     ;
     
@@ -155,21 +155,24 @@ name
     : ID
         {
           $$ = $1;
-          
+          nombres.push($1);
           ambitos.push({});
+          console.log(nombres);
         }
     ;
     
 statement
     : ID '=' e
         { 
-          buscarVariable($1);
-          $$ = { type: '=', left: { type: 'ID', value: $1 }, right: $3 }; 
+
+          //buscarVariable($1);
+          $$ = { type: '=', left: { type: 'ID', value: $1, declared_in: buscarVariable($1) }, right: $3 }; 
         }
     | CALL ID args
         { 
-          buscarProcedimiento($2, $3.length);
-          $$ = { type: 'CALL', id: $2, arguments: $3 }; 
+
+          //buscarProcedimiento($2, $3.length);
+          $$ = { type: 'CALL', id: $2, declared_in: buscarProcedimiento($2, $3.length), arguments: $3 }; 
         }
     | BEGIN statement statement_r END
         { 
@@ -243,8 +246,9 @@ condition
 e
     : ID '=' e
         {
-          buscarVariable($1);
-          $$ = { type: '=', left: { type: 'ID', value: $1 }, right: $3 }; 
+
+          //buscarVariable($1);
+          $$ = { type: '=', left: { type: 'ID', value: $1, declared_in: buscarVariable($1) }, right: $3 }; 
         }
     | PI '=' e 
         { throw new Error("Can't assign to constant 'π'"); }
@@ -276,8 +280,9 @@ e
         {$$ = Math.PI;}
     | ID 
         { 
-          buscarSimbolo($1);
-          $$ = { type: 'ID', value: $1 };
+
+          //buscarSimbolo($1);
+          $$ = { type: 'ID', value: $1, declared_in: buscarSimbolo($1) };
         }
     ;
     
