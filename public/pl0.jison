@@ -5,8 +5,32 @@
   
   var ambitos = [{}];
   
-  function buscarSimbolo (s, t) { 
-     
+  function buscarSimbolo (s) {
+    
+    for (i = (ambitos.length - 1); i >= 0; i--) {
+
+      if (ambitos[i][s] != undefined)
+        return;
+    }
+    
+    throw new Error(" Se precisa la declaraci&oacute;n previa de '" + s + "'" );
+  }
+  
+  function buscarProcedimiento (s, n) {
+    
+    for (i = (ambitos.length - 1); i >= 0; i--) {
+
+      if (ambitos[i][s] != undefined && ambitos[i][s].type == "procedure") {
+       
+        if (ambitos[i][s].arguments == n)
+          return;
+        
+        throw new Error(" Se pasa/n " + n + " parametros a '" + s + "'; se esperaba/n " + ambitos[i][s].arguments);
+      }
+        
+    }
+    
+    throw new Error(" Se precisa la declaraci&oacute;n previa de '" + s + "'" );
   }
 
 %}
@@ -96,13 +120,12 @@ procs
     ;
     
 proc
-    : PROCEDURE name args ';' block ';'
+    : PROCEDURE name dec_args ';' block ';'
         {
-          $$ = { type: 'procedure', id: $2, arguments: $3, block: $5, symbol_table: ambitos[ambitos.length - 1]/*, usados: aux_use */};
+          
+          $$ = { type: 'procedure', id: $2, arguments: $3, block: $5, symbol_table: ambitos.pop()/*, usados: aux_use */};
 
-          ambitos[ambitos.length - 2][$2] = { type: 'procedure', arguments: $3? $3.length : 0 };
-        
-          ambitos.pop();
+          ambitos[ambitos.length - 1][$2] = { type: 'procedure', arguments: $3? $3.length : 0 };
         }
     ;
     
@@ -117,11 +140,14 @@ name
 statement
     : ID '=' e
         { 
-          aux_use[$1] = { type: 'var' };
+          buscarSimbolo($1);
           $$ = { type: '=', left: { type: 'ID', value: $1 }, right: $3 }; 
         }
     | CALL ID args
-        { $$ = { type: 'CALL', id: $2, arguments: $3 }; }
+        { 
+          buscarProcedimiento($2, $3.length);
+          $$ = { type: 'CALL', id: $2, arguments: $3 }; 
+        }
     | BEGIN statement statement_r END
         { 
           var v_sts = [$2];
@@ -145,11 +171,32 @@ statement_r
         }
     ;
     
+dec_args
+    : /* vacío */ { $$ = []; }
+    | '(' ID dec_args_r ')'
+        {
+          $$ = [{ type: 'argument', value: $2 }];
+          if ($3) $$ = $$.concat($3);
+
+          for (i = 0; i < $$.length; i++)
+            ambitos[ambitos.length - 1][$$[i].value] = { type: 'argument' };
+        }
+    ;
+
+dec_args_r
+    : /* vacío */
+    | ',' ID dec_args_r
+        {
+          $$ = [{ type: 'argument', value: $2 }]
+          if ($3) $$ = $$.concat($3);
+        }
+    ;
+    
 args
     : /* vacío */ { $$ = []; }
     | '(' e args_r ')'
         {
-          $$ = [{ type: 'ARG', value: $2 }];
+          $$ = [{ type: 'argument', value: $2 }];
           if ($3) $$ = $$.concat($3);
         }
     ;
@@ -158,7 +205,7 @@ args_r
     : /* vacío */
     | ',' e args_r
         {
-          $$ = [{ type: 'ARG', value: $2 }]
+          $$ = [{ type: 'argument', value: $2 }]
           if ($3) $$ = $$.concat($3);
         }
     ;
@@ -173,7 +220,7 @@ condition
 e
     : ID '=' e
         {
-          aux_use[$1] = { type: 'var' }
+          buscarSimbolo($1);
           $$ = { type: '=', left: { type: 'ID', value: $1 }, right: $3 }; 
         }
     | PI '=' e 
@@ -206,7 +253,7 @@ e
         {$$ = Math.PI;}
     | ID 
         { 
-          aux_use[$1] = { type: 'var' }
+          buscarSimbolo($1);
           $$ = { type: 'ID', value: $1 };
         }
     ;
