@@ -423,7 +423,7 @@ parse: function parse(input) {
         if (ambitos[i][s].arguments == n)
           return nombres[i];
         
-        throw new Error(" Se pasa/n " + n + " parametros a '" + s + "'; se esperaba/n " + ambitos[i][s].arguments);
+        throw new Error(" Se pasa/n " + n + " parametro/s a '" + s + "'; se esperaba/n " + ambitos[i][s].arguments);
       }
         
     }
