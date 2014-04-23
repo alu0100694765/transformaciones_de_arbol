@@ -22,9 +22,9 @@ Así mismo, se deben guardar en la base de datos los programas, con el identifica
 ## Realización de la Práctica
 
 * README.md - Cristo [OK]
-* Análisis de Ámbito - 
-* Base de Datos -
-* Pruebas - 
+* Análisis de Ámbito - Cristo [OK]
+* Base de Datos - Sawan
+* Pruebas - Cristo | Sawan
 
 ## Despliegue
 
