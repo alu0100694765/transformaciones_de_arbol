@@ -13,7 +13,7 @@
         return nombres[i];
     }
     
-    throw new Error(" Se precisa la declaracion previa de '" + s + "'" );
+    throw new Error(" Se precisa la declaraci&oacute;n previa de '" + s + "'" );
   }
   
   function buscarVariable (s) {
@@ -27,7 +27,7 @@
           throw new Error(" '" + s + "' no es una variable" );
     }
     
-    throw new Error(" Se precisa la declaracion previa de '" + s + "'" );
+    throw new Error(" Se precisa la declaraci&oacute;n previa de '" + s + "'" );
   }
   
   function buscarProcedimiento (s, n) {
@@ -44,7 +44,7 @@
         
     }
     
-    throw new Error(" Se precisa la declaracion previa de '" + s + "'" );
+    throw new Error(" Se precisa la declaraci&oacute;n previa de '" + s + "'" );
   }
 
 %}
