@@ -1,4 +1,4 @@
-# Práctica 7 - PDL - Analizador de PL0 ampliado utilizando Jison
+# Práctica 7 - PDL - Análisis de Ámbito en PL0
 
 ## Autores
 
@@ -7,10 +7,9 @@
 
 ## Objetivo de la Práctica
 
-El objetivo de la práctica reside en la utilización de Jison, un generador automático de analizadores a partir de una gramática, para la creación de un analizador de PL0 ampliado.
-Se debe especificar la gramática reconocida, en el correspondiente apartado, asi como permitir guardar un máximo prefijado de programas, suprimiendo uno al azar en caso de superar el límite.
-Permitiendo únicamente almacenar ficheros a los usuarios autentificados (para lo que se debe extender la autentificación OAuth), con Google y otra plataforma que proporcione dicho servicio.
-Por último se realizaran una serie de pruebas que permitirán comprobar el correcto funcionamiento de todas las posibles sentencias del lenguaje que comprende el analizador; asi como una serie de situaciones de error.
+El objetivo de la práctica reside en la realización del análisis de ámbito en la implementación de un analizador de PL0 ampliado, empleando Jison.
+Cada procedimiento tiene asociado una tabla de símbolos, que incluye todas las constantes, variables, y otros procedimientos del mismo (así como una de ámbito global).
+Así mismo, se deben guardar en la base de datos los programas, con el identificador del usuario que lo ha almacenado; proporcionando la posibilidad a los usuarios de visualizar aquellos programas que han guardado.
 
 ## Recursos utilizados
 
@@ -23,17 +22,11 @@ Por último se realizaran una serie de pruebas que permitirán comprobar el correc
 ## Realización de la Práctica
 
 * README.md - Cristo [OK]
-* Página principal y vistas - Cristo | Sawan [OK]
-* Documentación de la gramática - Cristo [OK]
-* Implementación Analizador - Cristo [OK]
-* Code Mirror -Cristo [OK]
-* Base de Datos - Cristo | Sawan [OK]
-* Autentificación - Sawan [OK]
-* Pruebas - Sawan [OK]
-* Despliegue Heroku - Sawan [OK]
-* Estilo - Cristo | Sawan [OK]
+* Análisis de Ámbito - Cristo [OK]
+* Base de Datos - Sawan
+* Pruebas - Cristo | Sawan
 
 ## Despliegue
 
-* Heroku: http://analizador-p7pdl.herokuapp.com/
-* Pruebas: http://analizador-p7pdl.herokuapp.com/tests
+* Heroku: http://analizador-p8pdl.herokuapp.com/
+* Pruebas: http://analizador-p8pdl.herokuapp.com/tests
