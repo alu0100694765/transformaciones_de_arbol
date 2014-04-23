@@ -88,7 +88,7 @@ case 1:
         
 break;
 case 2:
-          this.$ = { type: 'block', procs: $$[$0-2], st: $$[$0-1] };
+          this.$ = { type: 'block', procs: $$[$0-1], st: $$[$0] };
         
 break;
 case 4:
@@ -137,7 +137,7 @@ case 14:
         
 break;
 case 15: 
-          buscarSimbolo($$[$0-2]);
+          buscarVariable($$[$0-2]);
           this.$ = { type: '=', left: { type: 'ID', value: $$[$0-2] }, right: $$[$0] }; 
         
 break;
@@ -195,7 +195,7 @@ break;
 case 32: this.$ = { type: $$[$0-1], left: $$[$0-2], right: $$[$0] }; 
 break;
 case 33:
-          buscarSimbolo($$[$0-2]);
+          buscarVariable($$[$0-2]);
           this.$ = { type: '=', left: { type: 'ID', value: $$[$0-2] }, right: $$[$0] }; 
         
 break;
@@ -382,8 +382,22 @@ parse: function parse(input) {
     
     for (i = (ambitos.length - 1); i >= 0; i--) {
 
-      if (ambitos[i][s] != undefined)
+      if (ambitos[i][s] != undefined && ambitos[i][s].type != "procedure")
         return;
+    }
+    
+    throw new Error(" Se precisa la declaraci&oacute;n previa de '" + s + "'" );
+  }
+  
+  function buscarVariable (s) {
+    
+    for (i = (ambitos.length - 1); i >= 0; i--) {
+
+      if (ambitos[i][s] != undefined)
+        if (ambitos[i][s].type == "var" || ambitos[i][s].type == "argument")
+          return;
+        else
+          throw new Error(" '" + s + "' no es una variable" );
     }
     
     throw new Error(" Se precisa la declaraci&oacute;n previa de '" + s + "'" );
@@ -398,7 +412,7 @@ parse: function parse(input) {
         if (ambitos[i][s].arguments == n)
           return;
         
-        throw new Error(" Se pasan " + n + " parametros a '" + s + "'; se esperaban " + ambitos[i][s].arguments);
+        throw new Error(" Se pasa/n " + n + " parametros a '" + s + "'; se esperaba/n " + ambitos[i][s].arguments);
       }
         
     }

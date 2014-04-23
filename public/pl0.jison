@@ -9,8 +9,22 @@
     
     for (i = (ambitos.length - 1); i >= 0; i--) {
 
-      if (ambitos[i][s] != undefined)
+      if (ambitos[i][s] != undefined && ambitos[i][s].type != "procedure")
         return;
+    }
+    
+    throw new Error(" Se precisa la declaraci&oacute;n previa de '" + s + "'" );
+  }
+  
+  function buscarVariable (s) {
+    
+    for (i = (ambitos.length - 1); i >= 0; i--) {
+
+      if (ambitos[i][s] != undefined)
+        if (ambitos[i][s].type == "var" || ambitos[i][s].type == "argument")
+          return;
+        else
+          throw new Error(" '" + s + "' no es una variable" );
     }
     
     throw new Error(" Se precisa la declaraci&oacute;n previa de '" + s + "'" );
@@ -62,7 +76,7 @@ prog
 block
     : consts vars procs statement
         {
-          $$ = { type: 'block', procs: $2, st: $3 };
+          $$ = { type: 'block', procs: $3, st: $4 };
         }
     ;
    
@@ -140,7 +154,7 @@ name
 statement
     : ID '=' e
         { 
-          buscarSimbolo($1);
+          buscarVariable($1);
           $$ = { type: '=', left: { type: 'ID', value: $1 }, right: $3 }; 
         }
     | CALL ID args
@@ -220,7 +234,7 @@ condition
 e
     : ID '=' e
         {
-          buscarSimbolo($1);
+          buscarVariable($1);
           $$ = { type: '=', left: { type: 'ID', value: $1 }, right: $3 }; 
         }
     | PI '=' e 
