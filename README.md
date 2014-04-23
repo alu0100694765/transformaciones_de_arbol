@@ -1,4 +1,4 @@
-# Práctica 7 - PDL - Análisis de Ámbito en PL0
+# Práctica 8 - PDL - Análisis de Ámbito en PL0
 
 ## Autores
 
@@ -24,7 +24,7 @@ Así mismo, se deben guardar en la base de datos los programas, con el identifica
 * README.md - Cristo [OK]
 * Análisis de Ámbito - Cristo [OK]
 * Base de Datos - Sawan
-* Pruebas - Cristo | Sawan
+* Pruebas - Cristo | Sawan [OK]
 
 ## Despliegue
 
