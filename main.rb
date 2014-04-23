@@ -4,12 +4,14 @@ require "sinatra/reloader" if development?
 require 'sinatra/flash'
 require 'pl0_program'
 require 'auth'
+require 'database'
 require 'pp'
 
 enable :sessions
 set :session_secret, '*&(^#234)'
 set :reserved_words, %w{grammar test login auth}
 set :max_files, 10        # no more than max_files+1 will be saved
+set :max_users_shown, 8
 
 helpers do
   def current?(path='/')
