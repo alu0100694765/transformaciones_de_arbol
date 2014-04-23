@@ -49,7 +49,7 @@ suite('Tests', function(){
 
   
   test('Call: ', function(){
-    object = pl0.parse("call z .")
+    object = pl0.parse("var a; procedure z; a = 2; call z.")
     assert.equal(object.block.st.type, "CALL")
   });
 
@@ -65,9 +65,9 @@ suite('Tests', function(){
   });
   
   test('Argumentos: ', function(){
-    object = pl0.parse("const b = 40, c = 10; procedure square(x, y); call square(b, c).")
+    object = pl0.parse("const b = 40, c = 10; procedure square(x, y); call square(b, c); call square(c, b).")
     assert.equal(object.block.procs[0].arguments[1].value, "y")
-    assert.equal(object.block.st.arguments[0].value, "x")
+    assert.equal(object.block.st.arguments[0].value.value, "c")
   });
 
   test('Error de Sintaxis: ', function(){
