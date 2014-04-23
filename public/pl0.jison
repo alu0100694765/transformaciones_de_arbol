@@ -3,11 +3,11 @@
 %{
   var aux_use = {};
   
-  var ambitos = [[{}]];
+  var ambitos = [{}];
   
-  function fact (n) { 
-    return n==0 ? 1 : fact(n-1) * n 
-}
+  function buscarSimbolo (s, t) { 
+     
+  }
 
 %}
 
@@ -30,30 +30,23 @@
 prog
     : block '.' EOF
         { 
-          $$ = { type: 'program', block: $1, symbol_table: ambitos[0][0], usados: aux_use };
+          $$ = { type: 'program', block: $1, symbol_table: ambitos[0]/*, usados: aux_use */};
           return $$;
         }
     ;
 
 block
-    : cyv procs statement
+    : consts vars procs statement
         {
           $$ = { type: 'block', procs: $2, st: $3 };
         }
     ;
-    
-cyv
-    : consts vars
-        {
-          ambitos.push([{}]);
-        }
-    ;
-    
+   
 consts
     : /* vacío */
     | CONST ID '=' NUMBER r_consts ';'
         {
-          ambitos[ambitos.length - 1][ambitos[ambitos.length - 1].length - 1][$2] = { type: 'const', value: $4 };
+          ambitos[ambitos.length - 1][$2] = { type: 'const', value: $4 };
 
           //$$ = [ { type: 'const', id: $2, value: $4 } ];
           //if ($5) $$ = $$.concat($5);
@@ -64,7 +57,7 @@ r_consts
     : /* vacío */
     | ',' ID '=' NUMBER r_consts
         {
-          ambitos[ambitos.length - 1][ambitos[ambitos.length - 1].length - 1][$2] = { type: 'const', value: $4 };
+          ambitos[ambitos.length - 1][$2] = { type: 'const', value: $4 };
           
           //$$ = [ { type: 'const', id: $2, value: $4 } ];
           //if ($5) $$ = $$.concat($5);
@@ -75,7 +68,7 @@ vars
     : /* vacío */
     | VAR ID r_vars ';'
         {
-          ambitos[ambitos.length - 1][ambitos[ambitos.length - 1].length - 1][$2] = { type: 'var' };
+          ambitos[ambitos.length - 1][$2] = { type: 'var' };
           
           //$$ = [ { type: 'var', id: $2 } ];
           //if ($3) $$ = $$.concat($3);
@@ -86,7 +79,7 @@ r_vars
     : /* vacío */
     | ',' ID r_vars
         {
-          ambitos[ambitos.length - 1][ambitos[ambitos.length - 1].length - 1][$2] = { type: 'var' };
+          ambitos[ambitos.length - 1][$2] = { type: 'var' };
           
           //$$ = [ { type: 'var', id: $2 } ];
           //if ($3) $$ = $$.concat($3);
@@ -95,32 +88,32 @@ r_vars
     
 procs
     : /* empty */ 
-        {     
-          ambitos.pop(); 
-        }
     | proc procs
         {
-
           $$ = [$1];
           if ($2) $$ = $$.concat($2);
-          
-          if (ambitos[ambitos.length - 1].length == 0)
-            ambitos.pop();
         }
     ;
     
 proc
-    : PROCEDURE ID args ';' block ';'
+    : PROCEDURE name args ';' block ';'
         {
+          $$ = { type: 'procedure', id: $2, arguments: $3, block: $5, symbol_table: ambitos[ambitos.length - 1]/*, usados: aux_use */};
 
-          $$ = { type: 'procedure', id: $2, arguments: $3, block: $5, symbol_table: ambitos[ambitos.length - 1][0], usados: aux_use };
-
-          ambitos[ambitos.length - 2][ambitos[ambitos.length - 1].length - 1][$2] = { type: 'procedure', arguments: $3? $3.length : 0 };
+          ambitos[ambitos.length - 2][$2] = { type: 'procedure', arguments: $3? $3.length : 0 };
         
-          ambitos[ambitos.length - 1] = [{}];
+          ambitos.pop();
         }
     ;
-
+    
+name
+    : ID
+        {
+          $$ = $1;
+          ambitos.push({});
+        }
+    ;
+    
 statement
     : ID '=' e
         { 
