@@ -58,7 +58,11 @@ procs
     ;
     
 proc
-    : PROCEDURE name dec_args ';' block ';'
+    : PROCEDURE dec_proc ';' block ';'
+    ;
+    
+dec_proc
+    : name dec_args
     ;
     
 name

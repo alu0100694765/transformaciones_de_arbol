@@ -68,7 +68,7 @@
 prog
     : block '.' EOF
         { 
-          $$ = { type: 'program', block: $1, symbol_table: ambitos[0]/*, usados: aux_use */};
+          $$ = { type: 'program', block: $1, symbol_table: ambitos[0] };
           return $$;
         }
     ;
@@ -134,12 +134,20 @@ procs
     ;
     
 proc
-    : PROCEDURE name dec_args ';' block ';'
+    : PROCEDURE dec_proc ';' block ';'
         {
           
-          $$ = { type: 'procedure', id: $2, arguments: $3, block: $5, symbol_table: ambitos.pop()/*, usados: aux_use */};
-
-          ambitos[ambitos.length - 1][$2] = { type: 'procedure', arguments: $3? $3.length : 0 };
+          $$ = { type: 'procedure', id: $2[0], arguments: $2[1], block: $4, symbol_table: ambitos.pop() };
+          
+        }
+    ;
+    
+dec_proc
+    : name dec_args
+        {
+          $$ = [$1, $2];
+          
+          ambitos[ambitos.length - 2][$1] = { type: 'procedure', arguments: $2? $2.length : 0 };
         }
     ;
     
@@ -147,6 +155,7 @@ name
     : ID
         {
           $$ = $1;
+          
           ambitos.push({});
         }
     ;
