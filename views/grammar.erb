@@ -51,22 +51,10 @@ r_vars
     :
     | ',' ID r_vars
     ;
-
+    
 procs
     :
-    | proc procs
-    ;
-    
-proc
-    : PROCEDURE dec_proc ';' block ';'
-    ;
-    
-dec_proc
-    : name dec_args
-    ;
-    
-name
-    : ID
+    | PROCEDURE ID args ';' block ';' procs
     ;
 
 statement
@@ -81,16 +69,6 @@ statement
 statement_r
     :
     | ';' statement statement_r
-    ;
-    
-dec_args
-    :
-    | '(' ID dec_args_r ')'
-    ;
-
-dec_args_r
-    :
-    | ',' ID dec_args_r
     ;
     
 args
