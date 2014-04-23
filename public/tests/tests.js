@@ -104,11 +104,11 @@ suite('Tests', function(){
   });
   
   test('Error de ID no declarada: ', function(){
-    assert.throws(function() { pl0.parse("procedure a; mal = 2; call a."); }, /Se precisa la declaraci&oacute;n previa de 'mal'/);
+    assert.throws(function() { pl0.parse("procedure a; mal = 2; call a."); }, /previa de 'mal'/);
   });
   
   test('Error de Call a un no procedimiento: ', function(){
-    assert.throws(function() { pl0.parse("var tr; procedure a; tr = 2; call tr."); }, /Se precisa la declaraci&oacute;n previa de 'tr'/);
+    assert.throws(function() { pl0.parse("var tr; procedure a; tr = 2; call tr."); }, /previa de 'tr'/);
   });
 
   test('Error de Numero de Argumentos: ', function(){
