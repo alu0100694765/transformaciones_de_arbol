@@ -60,15 +60,16 @@ post '/save' do
       c  = PL0Program.first(:name => name)
       if c
         c.source = params["input"]
+        c.user = session[:name]
+        c.provider = session[:provider]
         c.save
       else
-        if PL0Program.all.size > settings.max_files
-          c = PL0Program.all.sample
-          c.destroy
-        end
-        c = PL0Program.create(
-          :name => params["fname"], 
-          :source => params["input"])
+        c = PL0Program.new
+        c.name = params["fname"]
+        c.source = params["input"]
+        c.user = session[:name]
+        c.provider = session[:provider]
+        c.save 
       end
       flash[:notice] = 
         %Q{<div class="success">File saved as #{c.name} by #{session[:name]}.</div>}

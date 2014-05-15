@@ -40,6 +40,31 @@
 </span>
 </pre>
   </div>
+  <nav>
+   <table id="tablaArchivos" cellpadding="3" cellspacing="3">
+  
+  <tr><th>Nombre</th><th>Usuario</th><th>Red social</th></tr>
+         
+        <ul>
+          <% programs.each do |p| %>
+            <tr>
+            <td>
+              <li><a href="<%= p.name %>" <%=current?('/'+p.name)%>><%= p.name %></a></li>
+            </td>
+
+            <td>
+              <p><%= p.user %></p>
+            </td>
+
+            <td>
+              <p><%= p.provider %></p>
+            </td>
+            </tr>
+          <% end %>
+        </ul>  
+
+  </table>
+   </nav>
 </div>
 
     <script>

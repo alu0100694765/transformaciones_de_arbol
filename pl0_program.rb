@@ -8,6 +8,8 @@ class PL0Program
   
   property :name, String, :key => true
   property :source, String, :length => 1..1024
+  property :user, String, :length => 1..1024
+  property :provider, String, :length => 1..1024
   property :create_at, DateTime, :default => Time.now
   property :nuses,     Integer,  :default => 1
   
