@@ -1,4 +1,4 @@
-# Práctica 8 - PDL - Análisis de Ámbito en PL0
+# Práctica 9 - PDL - Transformaciones en Los Árboles del Analizador
 
 ## Autores
 
@@ -10,6 +10,8 @@
 El objetivo de la práctica reside en la realización del análisis de ámbito en la implementación de un analizador de PL0 ampliado, empleando Jison.
 Cada procedimiento tiene asociado una tabla de símbolos, que incluye todas las constantes, variables, y otros procedimientos del mismo (así como una de ámbito global).
 Así mismo, se deben guardar en la base de datos los programas, con el identificador del usuario que lo ha almacenado; proporcionando la posibilidad a los usuarios de visualizar aquellos programas que han guardado.
+
+Se desea crear una forma capaz de recorrer el árbol generado por el parser para realizar un plegado de constantes.
 
 ## Recursos utilizados
 
@@ -28,5 +30,5 @@ Así mismo, se deben guardar en la base de datos los programas, con el identifica
 
 ## Despliegue
 
-* Heroku: http://analizador-p8pdl.herokuapp.com/
-* Pruebas: http://analizador-p8pdl.herokuapp.com/tests
+* Heroku: http://analizador-p9pdl.herokuapp.com/
+* Pruebas: http://analizador-p9pdl.herokuapp.com/tests
