@@ -1,32 +1,29 @@
-# Pr·ctica 9 - PDL - Transformaciones en Los ¡rboles del Analizador
+# Pr√°ctica 9 - PDL - Transformaciones √°rbol
 
 ## Autores
 
-* Cristo Gonz·lez RodrÌguez - alu0100694987
+* Cristo Gonz√°lez Rodr√≠guez - alu0100694987
 * Sawan J. Kapai Harpalani - alu0100694765
 
-## Objetivo de la Pr·ctica
+## Objetivo de la Pr√°ctica
 
-El objetivo de la pr·ctica reside en la realizaciÛn del an·lisis de ·mbito en la implementaciÛn de un analizador de PL0 ampliado, empleando Jison.
-Cada procedimiento tiene asociado una tabla de sÌmbolos, que incluye todas las constantes, variables, y otros procedimientos del mismo (asÌ como una de ·mbito global).
-AsÌ mismo, se deben guardar en la base de datos los programas, con el identificador del usuario que lo ha almacenado; proporcionando la posibilidad a los usuarios de visualizar aquellos programas que han guardado.
-
-Se desea crear una forma capaz de recorrer el ·rbol generado por el parser para realizar un plegado de constantes.
+El objetivo de la pr√°ctica reside en la realizaci√≥n del plegado de constantes en un analizador de PL0 ampliado
+con an√°lisis de √°mbito. De esta manera aquellas operaciones entre constantes se sustituiran por un √∫nico valor, y
+lo mismo para los identificadores declarados como constantes (se reemplazar√°n por el valor utilizado en su declaraci√≥n).
 
 ## Recursos utilizados
 
-* Jison: http://zaach.github.io/jison/ - GeneraciÛn del analizador ampliado de PL0
-* OAuth: http://oauth.net/ - Protocolo abierto que permite la autentificaciÛn segura
+* Jison: http://zaach.github.io/jison/ - Generaci√≥n del analizador ampliado de PL0
+* OAuth: http://oauth.net/ - Protocolo abierto que permite la autentificaci√≥n segura
 * Heroku: https://www.heroku.com/ - Plataforma de aplicaciones en la nube
 * Heroku Postgres: https://devcenter.heroku.com/articles/heroku-postgresql - Servicio de base de datos SQL proporcionado por Heroku
 * DataMapper: http://datamapper.org/ - ORM escrito en Ruby
 
-## RealizaciÛn de la Pr·ctica
+## Realizaci√≥n de la Pr√°ctica
 
 * README.md - Cristo [OK]
-* An·lisis de ¡mbito - Cristo [OK]
-* Base de Datos - Sawan [OK]
-* Pruebas - Cristo | Sawan [OK]
+* Plegado de Constantes - Cristo [OK]
+* Base de Datos - Sawan
 
 ## Despliegue
 

@@ -3,6 +3,7 @@ $(document).ready(function() {
     try {
       editor = $(".CodeMirror")[0].CodeMirror
       var result = pl0.parse(editor.getValue());
+      recorrido(result);
       //var result = calculator.parse($('#input').val());
       $('#output').html(JSON.stringify(result,undefined,2));
     } catch (e) {
